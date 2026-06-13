@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>PaymentRasyaStore</title>
+  <!-- Google Fonts + Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: #050b17;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #eef5ff;
+      /* Background wallpaper baru */
+      background-image: url('https://files.catbox.moe/elq77w.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      position: relative;
+    }
+
+    /* Overlay gelap agar teks tetap terbaca */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(5, 11, 23, 0.65);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Canvas 3D Particle Background (tetap berjalan di atas overlay) */
+    .canvas-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 3;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 2rem 3rem;
+    }
+
+    /* header dengan LOGO */
+    .hero {
+      text-align: center;
+      margin-bottom: 3.5rem;
+      perspective: 800px;
+    }
+
+    /* Logo container */
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo {
+      width: 100px;
+      height: auto;
+      filter: drop-shadow(0 8px 20px rgba(0,0,0,0.4));
+      transition: transform 0.3s ease;
+      animation: floatLogo 3s ease-in-out infinite;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    @keyframes floatLogo {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #FFFFFF, #A7C0FF, #7B61FF, #C084FC);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.02em;
+      transform: translateZ(30px);
+      animation: floatText 3s ease-in-out infinite;
+      text-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+    .hero p {
+      font-size: 1.2rem;
+      opacity: 0.85;
+      backdrop-filter: blur(5px);
+      margin-top: 1rem;
+    }
+
+    @keyframes floatText {
+      0% { transform: translateY(0px) perspective(500px) translateZ(0); }
+      50% { transform: translateY(-8px) perspective(500px) translateZ(20px); }
+      100% { transform: translateY(0px) perspective(500px) translateZ(0); }
+    }
+
+    /* Grid Kartu Premium */
+    .payment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .card-3d {
+      background: rgba(12, 22, 40, 0.6);
+      backdrop-filter: blur(14px);
+      border-radius: 2.5rem;
+      padding: 2rem 1.8rem;
+      border: 1px solid rgba(110, 170, 250, 0.2);
+      box-shadow: 0 30px 40px -20px rgba(0,0,0,0.5), 0 0 0 0.5px rgba(255,255,255,0.05) inset;
+      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      transform-style: preserve-3d;
+      transform: translateZ(0) rotateX(2deg) rotateY(-0.5deg);
+    }
+
+    .card-3d:hover {
+      transform: translateY(-12px) rotateX(0deg) rotateY(0deg) scale(1.02);
+      background: rgba(18, 32, 58, 0.8);
+      border-color: rgba(80, 180, 255, 0.6);
+      box-shadow: 0 40px 55px -18px black;
+    }
+
+    .card-icon {
+      font-size: 3.5rem;
+      background: linear-gradient(145deg, #ffffff, #95c4ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+
+    .card-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    .card-sub {
+      font-size: 0.85rem;
+      opacity: 0.7;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.3px;
+    }
+
+    .info-panel {
+      background: rgba(0, 0, 0, 0.45);
+      border-radius: 1.8rem;
+      padding: 1rem 1.2rem;
+      margin: 1.2rem 0;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,240,0.1);
+    }
+
+    .number-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-family: monospace;
+      font-size: 1.3rem;
+      font-weight: 600;
+      background: #030b1a80;
+      border-radius: 2rem;
+      padding: 0.7rem 1.2rem;
+    }
+    .number-row span {
+      word-break: break-all;
+    }
+
+    .qr-container {
+      text-align: center;
+      margin: 1rem 0;
+      transition: transform 0.25s;
+    }
+    .qr-container img {
+      max-width: 170px;
+      width: 100%;
+      background: white;
+      border-radius: 1.5rem;
+      padding: 10px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 0 2px rgba(255,255,255,0.1);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .qr-container img:hover {
+      transform: scale(1.05) rotate(0.5deg);
+      box-shadow: 0 20px 35px rgba(0,0,0,0.5);
+    }
+
+    .btn-group-flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 1.6rem;
+    }
+    .btn {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0.8rem 1rem;
+      font-weight: 600;
+      border-radius: 2rem;
+      background: rgba(30, 40, 65, 0.8);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+      transition: 0.2s;
+      font-family: inherit;
+      font-size: 0.9rem;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 5px 0 #0f1420;
+      transform: translateY(-2px);
+    }
+    .btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #0f1420;
+    }
+    .btn-primary {
+      background: linear-gradient(110deg, #2266aa, #144a7a);
+      border-color: #3e8ed0;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(110deg, #2f7bc0, #1b5a8c);
+      transform: translateY(-3px);
+      box-shadow: 0 7px 0 #0f1420;
+    }
+    .btn-wa {
+      background: linear-gradient(110deg, #0f6b5e, #0a4a41);
+      border-color: #2cd48a;
+    }
+    .btn-channel {
+      background: linear-gradient(110deg, #5e3a9e, #38246e);
+      border-color: #b77cff;
+    }
+    .btn-copy {
+      background: #2a344ecc;
+      border-color: #ffcd7e;
+    }
+
+    /* Zone Kontak Premium */
+    .contact-premium {
+      background: rgba(8, 18, 32, 0.7);
+      backdrop-filter: blur(18px);
+      border-radius: 2rem;
+      padding: 2rem;
+      margin-top: 1.2rem;
+      border: 1px solid rgba(0, 180, 255, 0.2);
+      transition: 0.3s;
+    }
+    .contact-premium:hover {
+      border-color: #2aa2ff;
+      background: rgba(12, 24, 44, 0.8);
+    }
+    .flex-wa {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: space-between;
+      margin: 1.5rem 0 1rem;
+    }
+    .wa-card {
+      background: #07131f70;
+      border-radius: 1.5rem;
+      padding: 1rem 1.3rem;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border: 1px solid #2c577c40;
+    }
+    .wa-card i {
+      font-size: 2.2rem;
+    }
+    .wa-card a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.2s;
+      word-break: break-all;
+    }
+    .wa-card a:hover {
+      color: #25D366;
+    }
+    .badge-copy-sm {
+      background: #1e2b42;
+      border-radius: 30px;
+      padding: 0.2rem 0.8rem;
+      font-size: 0.7rem;
+      margin-left: 0.7rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: inline-block;
+    }
+
+    .toast-notif {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0e1e2fe6;
+      backdrop-filter: blur(20px);
+      padding: 12px 28px;
+      border-radius: 60px;
+      color: white;
+      font-weight: 500;
+      z-index: 1000;
+      transition: transform 0.25s ease;
+      pointer-events: none;
+      border-left: 4px solid #33ff99;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+      font-size: 0.9rem;
+    }
+    .toast-notif.show {
+      transform: translateX(-50%) translateY(0px);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      opacity: 0.6;
+      font-size: 0.75rem;
+    }
+
+    @media (max-width: 780px) {
+      .wrapper {
+        padding: 1rem 1.2rem 2rem;
+      }
+      .hero h1 {
+        font-size: 2.3rem;
+      }
+      .logo {
+        width: 70px;
+      }
+      .card-title {
+        font-size: 1.7rem;
+      }
+      .number-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .btn-group-flex .btn {
+        flex: auto;
+      }
+      .flex-wa {
+        flex-direction: column;
+      }
+    }
+
+    /* efek shimmer untuk tombol */
+    .btn-primary i, .btn-wa i, .btn-channel i {
+      transition: 0.2s;
+    }
+  </style>
+</head>
+<body>
+<canvas id="particleCanvas" class="canvas-bg"></canvas>
+
+<div class="wrapper">
+  <div class="hero">
+    <!-- Logo baru ditempatkan di hero -->
+    <div class="logo-container">
+      <img src="https://files.catbox.moe/elq77w.png" alt="Logo Nexus Pay" class="logo" id="mainLogo" onerror="this.onerror=null;this.src='https://placehold.co/200x200?text=LOGO&font=montserrat';">
+    </div>
+    <h1>✦ PAYMENT RASYA STORE ✦</h1>
+    <p></p>
+  </div>
+
+  <div class="payment-grid">
+    <!-- KARTU DANA dengan efek 3D -->
+    <div class="card-3d">
+      <div class="card-icon"><i class="fas fa-circle-dollar-to-slot"></i></div>
+      <h2 class="card-title">DANA</h2>
+      <div class="card-sub">Dompet digital terpercaya</div>
+      <div class="info-panel">
+        <div class="number-row">
+          <span><i class="fas fa-mobile-alt"></i> 08999889968</span>
+          <button class="btn-copy btn" id="copyDanaBtn" style="flex: 0 0 auto; padding: 0.3rem 1rem;"><i class="fas fa-copy"></i> Salin</button>
+        </div>
+        <div style="font-size: 0.75rem; margin-top: 10px; text-align: center;"><i class="fas fa-clock"></i> 24 jam online</div>
+      </div>
+      <div class="btn-group-flex">
+        <button id="danaInfoBtn" class="btn btn-primary"><i class="fas fa-info-circle"></i> Cara Bayar</button>
+        <button id="copyDanaOnlyBtn" class="btn btn-copy"><i class="fas fa-copy"></i> Salin No. DANA</button>
+      </div>
+    </div>
+
+    <!-- KARTU QRIS dengan gambar dan hover zoom -->
+    <div class="card-3d">
+      <div class="card-icon"><i class="fas fa-qrcode"></i></div>
+      <h2 class="card-title">QRIS</h2>
+      <div class="card-sub">Scan via any payment app</div>
+      <div class="qr-container">
+        <img id="qrisImage" src="https://files.catbox.moe/qzcuan.jpeg" alt="QRIS Pembayaran" onerror="this.onerror=null;this.src='https://placehold.co/350x350?text=QRIS+Image+Load+Error&font=montserrat';">
+      </div>
+      <div class="btn-group-flex">
+        <button id="expandQrBtn" class="btn btn-primary"><i class="fas fa-expand"></i> Perbesar QR</button>
+        <a id="downloadQrBtn" class="btn btn-copy" download="qris_payment.jpeg"><i class="fas fa-download"></i> Unduh</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bagian WhatsApp & Channel Premium -->
+  <div class="contact-premium">
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+      <i class="fab fa-whatsapp" style="font-size: 2rem; color: #25D366;"></i>
+      <h3 style="font-weight: 600;">Kanal Resmi & Dukungan</h3>
+    </div>
+    <div class="flex-wa">
+      <div class="wa-card">
+        <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+        <div>
+          <div><strong>WhatsApp Personal</strong></div>
+          <a href="https://wa.me/6289677269810" target="_blank">+62 896-7726-9810</a>
+          <span class="badge-copy-sm" id="copyWaNumber">Salin nomor</span>
+        </div>
+      </div>
+      <div class="wa-card">
+        <i class="fab fa-whatsapp" style="color: #0ef0b0;"></i>
+        <div>
+          <div><strong>Channel WhatsApp</strong></div>
+          <a href="https://whatsapp.com/channel/0029Vb8Ahsm2phHR7AkyIx2O" target="_blank">Bergabung ke Channel</a>
+          <span class="badge-copy-sm" id="copyChannelLink">Salin tautan</span>
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.2rem;">
+      <a href="https://wa.me/6289677269810?text=Halo%20saya%20butuh%20bantuan%20pembayaran" class="btn btn-wa" style="flex: 0;"><i class="fab fa-whatsapp"></i> Chat Sekarang</a>
+      <a href="https://whatsapp.com/channel/0029Vb8Ahsm2phHR7AkyIx2O" class="btn btn-channel" style="flex: 0;"><i class="fas fa-bell"></i> Ikuti Channel</a>
+    </div>
+  </div>
+  <footer>
+  </footer>
+</div>
+
+<div id="toastMessage" class="toast-notif">✅ Tersalin ke clipboard</div>
+
+<script>
+  // ---------- Toast Utility ----------
+  const toastEl = document.getElementById('toastMessage');
+  function showToast(msg) {
+    toastEl.textContent = msg || '✔️ Berhasil disalin!';
+    toastEl.classList.add('show');
+    setTimeout(() => toastEl.classList.remove('show'), 2200);
+  }
+
+  // Helper copy
+  async function copyText(text, successMsg) {
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast(successMsg || `📋 ${text} tersalin`);
+    } catch (err) {
+      // fallback
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      showToast(successMsg || '✅ Tersalin');
+    }
+  }
+
+  // ----- DANA numbers -----
+  const danaNumber = '08999889968';
+  const copyDanaBtn = document.getElementById('copyDanaBtn');
+  const copyDanaOnlyBtn = document.getElementById('copyDanaOnlyBtn');
+  if (copyDanaBtn) copyDanaBtn.onclick = () => copyText(danaNumber, '📱 Nomor DANA: ' + danaNumber);
+  if (copyDanaOnlyBtn) copyDanaOnlyBtn.onclick = () => copyText(danaNumber, '✅ Nomor DANA disimpan');
+
+  // ----- WhatsApp Number + Channel -----
+  const waNumber = '6289677269810';
+  const channelUrl = 'https://whatsapp.com/channel/0029Vb8Ahsm2phHR7AkyIx2O';
+  const copyWa = document.getElementById('copyWaNumber');
+  const copyChannel = document.getElementById('copyChannelLink');
+  if (copyWa) copyWa.onclick = () => copyText(waNumber, '📞 Nomor WA: +62 896-7726-9810');
+  if (copyChannel) copyChannel.onclick = () => copyText(channelUrl, '🔗 Link Channel WhatsApp tersalin');
+
+  // ----- QRIS : modal perbesar dengan efek 3D -----
+  const qrisImg = document.getElementById('qrisImage');
+  const expandBtn = document.getElementById('expandQrBtn');
+  const downloadBtn = document.getElementById('downloadQrBtn');
+
+  // fungsi modal modern
+  function showQrModal(imgSrc) {
+    let existingModal = document.getElementById('modal3dQr');
+    if (existingModal) existingModal.remove();
+    const modal = document.createElement('div');
+    modal.id = 'modal3dQr';
+    modal.style.position = 'fixed';
+    modal.style.top = '0';
+    modal.style.left = '0';
+    modal.style.width = '100%';
+    modal.style.height = '100%';
+    modal.style.backgroundColor = 'rgba(0,0,0,0.85)';
+    modal.style.backdropFilter = 'blur(20px)';
+    modal.style.zIndex = '2000';
+    modal.style.display = 'flex';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
+    modal.style.cursor = 'pointer';
+    modal.style.transition = 'all 0.2s';
+    
+    const modalInner = document.createElement('div');
+    modalInner.style.background = 'rgba(20,32,55,0.9)';
+    modalInner.style.borderRadius = '2rem';
+    modalInner.style.padding = '1rem';
+    modalInner.style.backdropFilter = 'blur(15px)';
+    modalInner.style.border = '2px solid rgba(255,215,0,0.4)';
+    modalInner.style.transform = 'scale(0.9)';
+    modalInner.style.transition = 'transform 0.25s cubic-bezier(0.2, 1.2, 0.4, 1)';
+    modalInner.style.maxWidth = '90vw';
+    modalInner.style.maxHeight = '90vh';
+    
+    const bigImg = document.createElement('img');
+    bigImg.src = imgSrc;
+    bigImg.style.maxWidth = '85vw';
+    bigImg.style.maxHeight = '80vh';
+    bigImg.style.borderRadius = '1.5rem';
+    bigImg.style.backgroundColor = 'white';
+    bigImg.style.padding = '12px';
+    bigImg.style.boxShadow = '0 25px 45px black';
+    
+    const closeLabel = document.createElement('div');
+    closeLabel.innerText = '✖ Klik dimanapun untuk menutup';
+    closeLabel.style.marginTop = '1rem';
+    closeLabel.style.color = '#ccc';
+    closeLabel.style.fontSize = '0.8rem';
+    closeLabel.style.textAlign = 'center';
+    
+    modalInner.appendChild(bigImg);
+    modalInner.appendChild(closeLabel);
+    modal.appendChild(modalInner);
+    document.body.appendChild(modal);
+    setTimeout(() => { modalInner.style.transform = 'scale(1)'; }, 20);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal || e.target === closeLabel) {
+        modalInner.style.transform = 'scale(0.9)';
+        setTimeout(() => modal.remove(), 200);
+      }
+    });
+  }
+
+  if (expandBtn) {
+    expandBtn.onclick = () => {
+      let finalUrl = qrisImg.src;
+      if (!finalUrl || finalUrl.includes('placehold')) finalUrl = 'https://files.catbox.moe/qzcuan.jpeg';
+      showQrModal(finalUrl);
+    };
+  }
+  // klik gambar QR langsung zoom
+  if (qrisImg) {
+    qrisImg.onclick = () => {
+      let url = qrisImg.src;
+      if (url.includes('placehold')) url = 'https://files.catbox.moe/qzcuan.jpeg';
+      showQrModal(url);
+    };
+  }
+  // perbaiki download link: pastikan atribut download menggunakan gambar asli
+  if (downloadBtn) {
+    downloadBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const imgUrl = qrisImg.src;
+      fetch(imgUrl)
+        .then(res => res.blob())
+        .then(blob => {
+          const link = document.createElement('a');
+          const objectUrl = URL.createObjectURL(blob);
+          link.href = objectUrl;
+          link.download = 'qris_payment_3d.png';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(objectUrl);
+          showToast('⬇️ QRIS berhasil diunduh');
+        })
+        .catch(() => {
+          // fallback langsung a href
+          const fallbackLink = document.createElement('a');
+          fallbackLink.href = 'https://files.catbox.moe/qzcuan.jpeg';
+          fallbackLink.download = 'qris_backup.jpeg';
+          fallbackLink.click();
+          showToast('📸 Mengunduh gambar...');
+        });
+    });
+  }
+
+  // Tombol info DANA
+  const danaInfo = document.getElementById('danaInfoBtn');
+  if (danaInfo) {
+    danaInfo.onclick = () => {
+      showToast('💡 Buka aplikasi DANA → Pilih "Bayar" → masukkan nomor 08999889968 → konfirmasi');
+    };
+  }
+
+  // ---- Efek 3D gerakan kartu lebih interaktif ----
+  const cards = document.querySelectorAll('.card-3d');
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateY = ((x - centerX) / centerX) * 8;
+      const rotateX = ((centerY - y) / centerY) * 6;
+      card.style.transform = `perspective(1300px) translateZ(12px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = `perspective(1300px) translateZ(0px) rotateX(2deg) rotateY(-1deg)`;
+    });
+  });
+
+  // ---- Background Particle 3D dinamis (canvas interaktif) ----
+  const canvas = document.getElementById('particleCanvas');
+  let ctx = canvas.getContext('2d');
+  let particles = [];
+  let animationId = null;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    initParticles();
+  });
+
+  function initParticles() {
+    particles = [];
+    const particleCount = Math.min(120, Math.floor(window.innerWidth / 12));
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 2.5 + 1,
+        alpha: Math.random() * 0.4 + 0.2,
+        speedX: (Math.random() - 0.5) * 0.4,
+        speedY: (Math.random() - 0.5) * 0.2 + 0.1,
+        color: `hsl(${Math.random() * 60 + 200}, 80%, 65%)`
+      });
+    }
+  }
+
+  function drawParticles() {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let p of particles) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.shadowBlur = 6;
+      ctx.shadowColor = "#6a9eff";
+      ctx.fill();
+      p.x += p.speedX;
+      p.y += p.speedY;
+      if (p.x < -10) p.x = canvas.width + 10;
+      if (p.x > canvas.width + 10) p.x = -10;
+      if (p.y < -10) p.y = canvas.height + 10;
+      if (p.y > canvas.height + 10) p.y = -10;
+    }
+    animationId = requestAnimationFrame(drawParticles);
+  }
+
+  resizeCanvas();
+  initParticles();
+  drawParticles();
+
+  // cleanup on page unload (optional)
+  window.addEventListener('beforeunload', () => {
+    if (animationId) cancelAnimationFrame(animationId);
+  });
+</script>
+</body>
+  </html>
