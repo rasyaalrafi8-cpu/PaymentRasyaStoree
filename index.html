@@ -20,7 +20,7 @@
       min-height: 100vh;
       overflow-x: hidden;
       color: #eef5ff;
-      /* Background wallpaper baru */
+      /* Background wallpaper */
       background-image: url('https://files.catbox.moe/elq77w.png');
       background-size: cover;
       background-position: center;
@@ -42,7 +42,7 @@
       pointer-events: none;
     }
 
-    /* Canvas 3D Particle Background (tetap berjalan di atas overlay) */
+    /* Canvas 3D Particle Background */
     .canvas-bg {
       position: fixed;
       top: 0;
@@ -68,7 +68,6 @@
       perspective: 800px;
     }
 
-    /* Logo container */
     .logo-container {
       display: flex;
       justify-content: center;
@@ -350,6 +349,93 @@
       font-size: 0.75rem;
     }
 
+    /* ========= MODAL WELCOME YANG BAGUS ========= */
+    .welcome-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(12px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      visibility: visible;
+      opacity: 1;
+      transition: opacity 0.4s ease, visibility 0.4s;
+    }
+    .welcome-modal.hide {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .welcome-card {
+      background: rgba(12, 25, 45, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 2.5rem;
+      padding: 2.5rem 2rem;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      border: 1px solid rgba(100, 180, 255, 0.5);
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.1) inset;
+      transform: scale(0.9);
+      animation: popIn 0.4s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .welcome-logo {
+      width: 90px;
+      margin-bottom: 1rem;
+      border-radius: 2rem;
+      background: rgba(255,255,255,0.1);
+      padding: 8px;
+    }
+    .welcome-card h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff, #a0c0ff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    .welcome-card p {
+      color: #ccddf8;
+      margin: 1rem 0;
+      line-height: 1.5;
+    }
+    .welcome-features {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+    .welcome-features span {
+      background: rgba(255,255,255,0.1);
+      padding: 0.3rem 1rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .btn-welcome {
+      background: linear-gradient(110deg, #2b6a9f, #1a4570);
+      border: none;
+      padding: 0.9rem 2rem;
+      font-size: 1rem;
+      margin-top: 0.8rem;
+      box-shadow: 0 8px 0 #0e2a3f;
+      transform: translateY(-2px);
+    }
+    .btn-welcome:active {
+      transform: translateY(4px);
+      box-shadow: 0 3px 0 #0e2a3f;
+    }
+
     @media (max-width: 780px) {
       .wrapper {
         padding: 1rem 1.2rem 2rem;
@@ -373,29 +459,42 @@
       .flex-wa {
         flex-direction: column;
       }
-    }
-
-    /* efek shimmer untuk tombol */
-    .btn-primary i, .btn-wa i, .btn-channel i {
-      transition: 0.2s;
+      .welcome-card {
+        padding: 1.8rem;
+      }
     }
   </style>
 </head>
 <body>
+
+<!-- WELCOME MODAL (MENU WELCOME) -->
+<div id="welcomeModal" class="welcome-modal">
+  <div class="welcome-card">
+    <img src="https://files.catbox.moe/elq77w.png" alt="Logo" class="welcome-logo" onerror="this.src='https://placehold.co/200x200?text=LOGO'">
+    <h2>Selamat Datang!</h2>
+    <p>Nikmati pengalaman pembayaran tercepat & teraman. Kami hadir untuk kemudahan transaksi digital Anda.</p>
+    <div class="welcome-features">
+      <span><i class="fas fa-shield-alt"></i>RasyaStore</span>
+      <span><i class="fas fa-bolt"></i> Instan</span>
+      <span><i class="fas fa-wallet"></i> DANA & QRIS</span>
+    </div>
+    <button id="closeWelcomeBtn" class="btn btn-primary btn-welcome"><i class="fas fa-rocket"></i> Mulai Bertransaksi</button>
+  </div>
+</div>
+
 <canvas id="particleCanvas" class="canvas-bg"></canvas>
 
 <div class="wrapper">
   <div class="hero">
-    <!-- Logo baru ditempatkan di hero -->
     <div class="logo-container">
       <img src="https://files.catbox.moe/elq77w.png" alt="Logo Nexus Pay" class="logo" id="mainLogo" onerror="this.onerror=null;this.src='https://placehold.co/200x200?text=LOGO&font=montserrat';">
     </div>
-    <h1>✦ PAYMENT RASYA STORE ✦</h1>
+    <h1>✦ RASYA STORE ✦</h1>
     <p></p>
   </div>
 
   <div class="payment-grid">
-    <!-- KARTU DANA dengan efek 3D -->
+    <!-- KARTU DANA -->
     <div class="card-3d">
       <div class="card-icon"><i class="fas fa-circle-dollar-to-slot"></i></div>
       <h2 class="card-title">DANA</h2>
@@ -413,7 +512,7 @@
       </div>
     </div>
 
-    <!-- KARTU QRIS dengan gambar dan hover zoom -->
+    <!-- KARTU QRIS -->
     <div class="card-3d">
       <div class="card-icon"><i class="fas fa-qrcode"></i></div>
       <h2 class="card-title">QRIS</h2>
@@ -464,6 +563,35 @@
 <div id="toastMessage" class="toast-notif">✅ Tersalin ke clipboard</div>
 
 <script>
+  // ============ WELCOME MODAL ============
+  const welcomeModal = document.getElementById('welcomeModal');
+  const closeWelcomeBtn = document.getElementById('closeWelcomeBtn');
+
+  // Cek apakah sudah pernah ditampilkan (gunakan sessionStorage agar tidak muncul setiap refresh, tapi akan muncul sekali per sesi)
+  // Jika ingin selalu muncul setiap load, hapus pengecekan ini. Tapi lebih baik sekali per sesi.
+  if (sessionStorage.getItem('welcomeShown')) {
+    welcomeModal.classList.add('hide');
+  } else {
+    welcomeModal.classList.remove('hide');
+    sessionStorage.setItem('welcomeShown', 'true');
+  }
+
+  // Fungsi menutup modal
+  function closeWelcomeModal() {
+    welcomeModal.classList.add('hide');
+  }
+
+  if (closeWelcomeBtn) {
+    closeWelcomeBtn.addEventListener('click', closeWelcomeModal);
+  }
+
+  // Klik di luar modal (pada overlay) juga bisa menutup
+  welcomeModal.addEventListener('click', (e) => {
+    if (e.target === welcomeModal) {
+      closeWelcomeModal();
+    }
+  });
+
   // ---------- Toast Utility ----------
   const toastEl = document.getElementById('toastMessage');
   function showToast(msg) {
@@ -478,7 +606,6 @@
       await navigator.clipboard.writeText(text);
       showToast(successMsg || `📋 ${text} tersalin`);
     } catch (err) {
-      // fallback
       const textarea = document.createElement('textarea');
       textarea.value = text;
       document.body.appendChild(textarea);
@@ -489,14 +616,14 @@
     }
   }
 
-  // ----- DANA numbers -----
+  // ----- DANA -----
   const danaNumber = '08999889968';
   const copyDanaBtn = document.getElementById('copyDanaBtn');
   const copyDanaOnlyBtn = document.getElementById('copyDanaOnlyBtn');
   if (copyDanaBtn) copyDanaBtn.onclick = () => copyText(danaNumber, '📱 Nomor DANA: ' + danaNumber);
   if (copyDanaOnlyBtn) copyDanaOnlyBtn.onclick = () => copyText(danaNumber, '✅ Nomor DANA disimpan');
 
-  // ----- WhatsApp Number + Channel -----
+  // ----- WhatsApp & Channel -----
   const waNumber = '6289677269810';
   const channelUrl = 'https://whatsapp.com/channel/0029Vb8Ahsm2phHR7AkyIx2O';
   const copyWa = document.getElementById('copyWaNumber');
@@ -504,12 +631,11 @@
   if (copyWa) copyWa.onclick = () => copyText(waNumber, '📞 Nomor WA: +62 896-7726-9810');
   if (copyChannel) copyChannel.onclick = () => copyText(channelUrl, '🔗 Link Channel WhatsApp tersalin');
 
-  // ----- QRIS : modal perbesar dengan efek 3D -----
+  // ----- QRIS Modal -----
   const qrisImg = document.getElementById('qrisImage');
   const expandBtn = document.getElementById('expandQrBtn');
   const downloadBtn = document.getElementById('downloadQrBtn');
 
-  // fungsi modal modern
   function showQrModal(imgSrc) {
     let existingModal = document.getElementById('modal3dQr');
     if (existingModal) existingModal.remove();
@@ -527,7 +653,6 @@
     modal.style.alignItems = 'center';
     modal.style.justifyContent = 'center';
     modal.style.cursor = 'pointer';
-    modal.style.transition = 'all 0.2s';
     
     const modalInner = document.createElement('div');
     modalInner.style.background = 'rgba(20,32,55,0.9)';
@@ -576,7 +701,6 @@
       showQrModal(finalUrl);
     };
   }
-  // klik gambar QR langsung zoom
   if (qrisImg) {
     qrisImg.onclick = () => {
       let url = qrisImg.src;
@@ -584,7 +708,6 @@
       showQrModal(url);
     };
   }
-  // perbaiki download link: pastikan atribut download menggunakan gambar asli
   if (downloadBtn) {
     downloadBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -603,7 +726,6 @@
           showToast('⬇️ QRIS berhasil diunduh');
         })
         .catch(() => {
-          // fallback langsung a href
           const fallbackLink = document.createElement('a');
           fallbackLink.href = 'https://files.catbox.moe/qzcuan.jpeg';
           fallbackLink.download = 'qris_backup.jpeg';
@@ -613,7 +735,7 @@
     });
   }
 
-  // Tombol info DANA
+  // Info DANA
   const danaInfo = document.getElementById('danaInfoBtn');
   if (danaInfo) {
     danaInfo.onclick = () => {
@@ -621,7 +743,7 @@
     };
   }
 
-  // ---- Efek 3D gerakan kartu lebih interaktif ----
+  // Efek 3D pada kartu
   const cards = document.querySelectorAll('.card-3d');
   cards.forEach(card => {
     card.addEventListener('mousemove', (e) => {
@@ -639,7 +761,7 @@
     });
   });
 
-  // ---- Background Particle 3D dinamis (canvas interaktif) ----
+  // Particle Background
   const canvas = document.getElementById('particleCanvas');
   let ctx = canvas.getContext('2d');
   let particles = [];
@@ -662,7 +784,6 @@
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         radius: Math.random() * 2.5 + 1,
-        alpha: Math.random() * 0.4 + 0.2,
         speedX: (Math.random() - 0.5) * 0.4,
         speedY: (Math.random() - 0.5) * 0.2 + 0.1,
         color: `hsl(${Math.random() * 60 + 200}, 80%, 65%)`
@@ -694,10 +815,9 @@
   initParticles();
   drawParticles();
 
-  // cleanup on page unload (optional)
   window.addEventListener('beforeunload', () => {
     if (animationId) cancelAnimationFrame(animationId);
   });
 </script>
 </body>
-  </html>
+</html>
