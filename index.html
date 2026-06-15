@@ -20,7 +20,6 @@
       min-height: 100vh;
       overflow-x: hidden;
       color: #eef5ff;
-      /* Background wallpaper */
       background-image: url('https://files.catbox.moe/elq77w.png');
       background-size: cover;
       background-position: center;
@@ -29,7 +28,6 @@
       position: relative;
     }
 
-    /* Overlay gelap agar teks tetap terbaca */
     body::before {
       content: "";
       position: fixed;
@@ -42,7 +40,6 @@
       pointer-events: none;
     }
 
-    /* Canvas 3D Particle Background */
     .canvas-bg {
       position: fixed;
       top: 0;
@@ -61,7 +58,6 @@
       padding: 2rem 2rem 3rem;
     }
 
-    /* header dengan LOGO */
     .hero {
       text-align: center;
       margin-bottom: 3.5rem;
@@ -117,7 +113,6 @@
       100% { transform: translateY(0px) perspective(500px) translateZ(0); }
     }
 
-    /* Grid Kartu Premium */
     .payment-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -265,7 +260,6 @@
       border-color: #ffcd7e;
     }
 
-    /* Zone Kontak Premium */
     .contact-premium {
       background: rgba(8, 18, 32, 0.7);
       backdrop-filter: blur(18px);
@@ -349,7 +343,7 @@
       font-size: 0.75rem;
     }
 
-    /* ========= MODAL WELCOME YANG BAGUS ========= */
+    /* Welcome Modal */
     .welcome-modal {
       position: fixed;
       top: 0;
@@ -467,14 +461,17 @@
 </head>
 <body>
 
-<!-- WELCOME MODAL (MENU WELCOME) -->
+<!-- Audio MP3: autoplay setelah interaksi, loop, tidak bisa mute (tanpa kontrol) -->
+<audio id="bgmAudio" loop preload="auto" style="display: none;"></audio>
+
+<!-- WELCOME MODAL -->
 <div id="welcomeModal" class="welcome-modal">
   <div class="welcome-card">
     <img src="https://files.catbox.moe/elq77w.png" alt="Logo" class="welcome-logo" onerror="this.src='https://placehold.co/200x200?text=LOGO'">
     <h2>Selamat Datang!</h2>
     <p>Nikmati pengalaman pembayaran tercepat & teraman. Kami hadir untuk kemudahan transaksi digital Anda.</p>
     <div class="welcome-features">
-      <span><i class="fas fa-shield-alt"></i>RasyaStore</span>
+      <span><i class="fas fa-shield-alt"></i> RasyaStore</span>
       <span><i class="fas fa-bolt"></i> Instan</span>
       <span><i class="fas fa-wallet"></i> DANA & QRIS</span>
     </div>
@@ -490,11 +487,10 @@
       <img src="https://files.catbox.moe/elq77w.png" alt="Logo Nexus Pay" class="logo" id="mainLogo" onerror="this.onerror=null;this.src='https://placehold.co/200x200?text=LOGO&font=montserrat';">
     </div>
     <h1>✦ RASYA STORE ✦</h1>
-    <p></p>
+    <p>Pengalaman transaksi imersif • Kecepatan instan • Keamanan tingkat tinggi</p>
   </div>
 
   <div class="payment-grid">
-    <!-- KARTU DANA -->
     <div class="card-3d">
       <div class="card-icon"><i class="fas fa-circle-dollar-to-slot"></i></div>
       <h2 class="card-title">DANA</h2>
@@ -512,7 +508,6 @@
       </div>
     </div>
 
-    <!-- KARTU QRIS -->
     <div class="card-3d">
       <div class="card-icon"><i class="fas fa-qrcode"></i></div>
       <h2 class="card-title">QRIS</h2>
@@ -527,7 +522,6 @@
     </div>
   </div>
 
-  <!-- Bagian WhatsApp & Channel Premium -->
   <div class="contact-premium">
     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
       <i class="fab fa-whatsapp" style="font-size: 2rem; color: #25D366;"></i>
@@ -563,29 +557,59 @@
 <div id="toastMessage" class="toast-notif">✅ Tersalin ke clipboard</div>
 
 <script>
-  // ============ WELCOME MODAL ============
+  // ============ AUDIO MP3 (AUTO PLAY SETELAH INTERAKSI, LOOP, TIDAK BISA MUTE) ============
+  const audio = document.getElementById('bgmAudio');
+  audio.src = 'https://i.top4top.io/m_38186wc000.mp3';
+  audio.loop = true;
+  audio.volume = 0.7; // volume sedang, tidak bisa diubah user karena tidak ada kontrol
+  // Tidak ada tombol mute / kontrol audio
+
+  // Fungsi untuk memulai audio (hanya bisa dipanggil setelah ada interaksi user)
+  function startBackgroundMusic() {
+    if (audio.paused) {
+      audio.play().catch(e => console.log("Autoplay ditolak browser, tapi interaksi sudah terjadi seharusnya berhasil."));
+    }
+  }
+
+  // ============ WELCOME MODAL + MEMULAI MUSIK SAAT MODAL DITUTUP ============
   const welcomeModal = document.getElementById('welcomeModal');
   const closeWelcomeBtn = document.getElementById('closeWelcomeBtn');
 
-  // Cek apakah sudah pernah ditampilkan (gunakan sessionStorage agar tidak muncul setiap refresh, tapi akan muncul sekali per sesi)
-  // Jika ingin selalu muncul setiap load, hapus pengecekan ini. Tapi lebih baik sekali per sesi.
+  // Cek sesi (tampilkan sekali per sesi)
   if (sessionStorage.getItem('welcomeShown')) {
     welcomeModal.classList.add('hide');
+    // Jika sudah pernah ditutup sebelumnya, kita tetap perlu mulai musik? Musik belum mulai karena belum interaksi.
+    // Tapi jika modal sudah tersembunyi, kita mulai musik secara otomatis? 
+    // Agar sesuai permintaan "auto play" dan tidak bisa mute, kita mulai musik setelah halaman siap 
+    // TAPI tanpa interaksi tidak akan jalan. Jadi kita perlu meminta interaksi minimal.
+    // Jika modal sudah tersembunyi (karena reload dalam sesi yang sama), kita bisa langsung coba play.
+    // Namun tetap perlu interaksi user terlebih dahulu karena browser modern. 
+    // Maka kita buat tombol floating kecil? Tidak. Kita bisa mulai musik saat user mengklik area manapun.
+    // Tapi lebih baik kita tetap mengandalkan tombol "Mulai Bertransaksi" yang mungkin sudah diklik sebelumnya.
+    // Karena sessionStorage sudah ada, berarti user sudah pernah klik tombol di sesi ini, sehingga kita bisa langsung play musik?
+    // Tidak, karena audio context tidak tersimpan. Kita buat agar ketika modal tidak ditampilkan, kita tambahkan event listener sekali klik pada body.
+    function oneTimePlay() {
+      startBackgroundMusic();
+      document.body.removeEventListener('click', oneTimePlay);
+      document.body.removeEventListener('touchstart', oneTimePlay);
+    }
+    document.body.addEventListener('click', oneTimePlay);
+    document.body.addEventListener('touchstart', oneTimePlay);
   } else {
     welcomeModal.classList.remove('hide');
     sessionStorage.setItem('welcomeShown', 'true');
   }
 
-  // Fungsi menutup modal
   function closeWelcomeModal() {
     welcomeModal.classList.add('hide');
+    // Mulai musik saat modal ditutup (user klik tombol)
+    startBackgroundMusic();
   }
 
   if (closeWelcomeBtn) {
     closeWelcomeBtn.addEventListener('click', closeWelcomeModal);
   }
 
-  // Klik di luar modal (pada overlay) juga bisa menutup
   welcomeModal.addEventListener('click', (e) => {
     if (e.target === welcomeModal) {
       closeWelcomeModal();
@@ -600,7 +624,6 @@
     setTimeout(() => toastEl.classList.remove('show'), 2200);
   }
 
-  // Helper copy
   async function copyText(text, successMsg) {
     try {
       await navigator.clipboard.writeText(text);
@@ -616,14 +639,14 @@
     }
   }
 
-  // ----- DANA -----
+  // DANA
   const danaNumber = '08999889968';
   const copyDanaBtn = document.getElementById('copyDanaBtn');
   const copyDanaOnlyBtn = document.getElementById('copyDanaOnlyBtn');
   if (copyDanaBtn) copyDanaBtn.onclick = () => copyText(danaNumber, '📱 Nomor DANA: ' + danaNumber);
   if (copyDanaOnlyBtn) copyDanaOnlyBtn.onclick = () => copyText(danaNumber, '✅ Nomor DANA disimpan');
 
-  // ----- WhatsApp & Channel -----
+  // WA & Channel
   const waNumber = '6289677269810';
   const channelUrl = 'https://whatsapp.com/channel/0029Vb8Ahsm2phHR7AkyIx2O';
   const copyWa = document.getElementById('copyWaNumber');
@@ -631,7 +654,7 @@
   if (copyWa) copyWa.onclick = () => copyText(waNumber, '📞 Nomor WA: +62 896-7726-9810');
   if (copyChannel) copyChannel.onclick = () => copyText(channelUrl, '🔗 Link Channel WhatsApp tersalin');
 
-  // ----- QRIS Modal -----
+  // QRIS
   const qrisImg = document.getElementById('qrisImage');
   const expandBtn = document.getElementById('expandQrBtn');
   const downloadBtn = document.getElementById('downloadQrBtn');
@@ -735,7 +758,6 @@
     });
   }
 
-  // Info DANA
   const danaInfo = document.getElementById('danaInfoBtn');
   if (danaInfo) {
     danaInfo.onclick = () => {
@@ -743,7 +765,7 @@
     };
   }
 
-  // Efek 3D pada kartu
+  // Efek 3D kartu
   const cards = document.querySelectorAll('.card-3d');
   cards.forEach(card => {
     card.addEventListener('mousemove', (e) => {
@@ -761,7 +783,7 @@
     });
   });
 
-  // Particle Background
+  // Partikel
   const canvas = document.getElementById('particleCanvas');
   let ctx = canvas.getContext('2d');
   let particles = [];
