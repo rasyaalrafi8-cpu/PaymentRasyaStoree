@@ -30,6 +30,45 @@
       z-index: 0;
       pointer-events: none;
     }
+
+    /* EFEK BACKGROUND PS2 — SCANLINES CRT + VIGNETTE */
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.18),
+          rgba(0, 0, 0, 0.18) 1px,
+          transparent 1px,
+          transparent 3px
+        ),
+        radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.55) 100%);
+      z-index: 100;
+      pointer-events: none;
+      animation: ps2Flicker 0.15s infinite;
+      opacity: 0.55;
+    }
+    @keyframes ps2Flicker {
+      0% { opacity: 0.55; }
+      50% { opacity: 0.53; }
+      100% { opacity: 0.55; }
+    }
+
+    .ps2-chroma-layer {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 99;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255, 0, 100, 0.04), transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(0, 150, 255, 0.05), transparent 50%);
+      mix-blend-mode: screen;
+    }
+
     .canvas-bg {
       position: fixed;
       top: 0; left: 0;
@@ -80,8 +119,11 @@
       color: transparent;
       letter-spacing: -0.02em;
       transform: translateZ(30px);
-      animation: floatText 3s ease-in-out infinite;
-      text-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      animation: floatText 3s ease-in-out infinite, ps2ChromaText 4s ease-in-out infinite;
+      text-shadow:
+        2px 0 rgba(255, 0, 100, 0.25),
+        -2px 0 rgba(0, 200, 255, 0.25),
+        0 15px 30px rgba(0, 0, 0, 0.2);
     }
     .hero p {
       font-size: 1.2rem;
@@ -93,6 +135,20 @@
       0% { transform: translateY(0px) perspective(500px) translateZ(0); }
       50% { transform: translateY(-8px) perspective(500px) translateZ(20px); }
       100% { transform: translateY(0px) perspective(500px) translateZ(0); }
+    }
+    @keyframes ps2ChromaText {
+      0%, 100% {
+        text-shadow:
+          2px 0 rgba(255, 0, 100, 0.25),
+          -2px 0 rgba(0, 200, 255, 0.25),
+          0 15px 30px rgba(0, 0, 0, 0.2);
+      }
+      50% {
+        text-shadow:
+          3px 0 rgba(255, 0, 100, 0.35),
+          -3px 0 rgba(0, 200, 255, 0.35),
+          0 15px 30px rgba(0, 0, 0, 0.2);
+      }
     }
 
     .payment-grid {
@@ -119,7 +175,7 @@
       transform: translateY(-12px) rotateX(0deg) rotateY(0deg) scale(1.02);
       background: rgba(18, 32, 58, 0.8);
       border-color: rgba(80, 180, 255, 0.6);
-      box-shadow: 0 40px 55px -18px black;
+      box-shadow: 0 40px 55px -18px black, 0 0 60px rgba(80, 180, 255, 0.3);
     }
     .card-icon {
       font-size: 4rem;
@@ -129,6 +185,7 @@
       color: transparent;
       margin-bottom: 1rem;
       display: inline-block;
+      filter: drop-shadow(0 0 15px rgba(100, 180, 255, 0.6));
     }
     .card-title {
       font-size: 2.2rem;
@@ -158,7 +215,7 @@
     }
     .qr-container img:hover {
       transform: scale(1.05) rotate(0.5deg);
-      box-shadow: 0 20px 35px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 35px rgba(0, 0, 0, 0.5), 0 0 40px rgba(100, 180, 255, 0.5);
     }
     .qr-caption {
       font-size: 0.8rem;
@@ -293,6 +350,7 @@
     .contact-premium:hover {
       border-color: #2aa2ff;
       background: rgba(12, 24, 44, 0.8);
+      box-shadow: 0 0 50px rgba(60, 160, 255, 0.2);
     }
     .flex-wa {
       display: flex;
@@ -587,6 +645,11 @@
 <body>
 
 <!-- ============================================================
+     AUDIO MP3 — AUTO PLAY SETELAH KLIK "MASUK KE TOKO", LOOP, TANPA MUTE
+============================================================ -->
+<audio id="bgmAudio" loop preload="auto" style="display: none;"></audio>
+
+<!-- ============================================================
      PS2 BOOT SCREEN WELCOME (PERMANEN)
 ============================================================ -->
 <div id="ps2Welcome" class="ps2-welcome">
@@ -596,7 +659,7 @@
 
   <div class="ps2-content">
     <img src="https://cdn.zass.in/tjYkaDSJg0.jpg" alt="Rasya Store" class="ps2-logo" onerror="this.src='https://placehold.co/200x200?text=LOGO'" />
-    <div class="ps2-title">PAYMENT RASYA STORE</div>
+    <div class="ps2-title">WELCOME TO PAYMENT RASYA STORE</div>
     <div class="ps2-subtitle"></div>
     
     <div class="ps2-loading-container">
@@ -610,6 +673,7 @@
   </div>
 </div>
 
+<div class="ps2-chroma-layer"></div>
 <canvas id="particleCanvas" class="canvas-bg"></canvas>
 
 <div class="wrapper">
@@ -617,7 +681,7 @@
     <div class="logo-container">
       <img src="https://cdn.zass.in/tjYkaDSJg0.jpg" alt="Rasya Store Logo" class="logo" id="mainLogo" onerror="this.onerror=null;this.src='https://placehold.co/200x200?text=LOGO&font=montserrat';" />
     </div>
-    <h1> PAYMENT RASYA STORE </h1>
+    <h1>PAYMENT RASYA STORE</h1>
     <p></p>
   </div>
 
@@ -672,13 +736,31 @@
 
 <script>
   // ============================================================
-  // PS2 WELCOME — PERMANEN (MUNCUL SETIAP RELOAD)
+  // AUDIO MP3 — LOOP, TANPA MUTE
+  // ============================================================
+  const audio = document.getElementById('bgmAudio');
+  audio.src = 'https://l.top4top.io/m_39539lzmr0.mp3';
+  audio.loop = true;
+  audio.volume = 0.6;
+  audio.setAttribute('playsinline', '');
+  audio.setAttribute('webkit-playsinline', '');
+
+  function startBackgroundMusic() {
+    if (audio.paused) {
+      audio.play().catch(err => console.log('Autoplay ditolak:', err));
+    }
+  }
+
+  // ============================================================
+  // PS2 WELCOME — PERMANEN
   // ============================================================
   const ps2Welcome = document.getElementById('ps2Welcome');
   const ps2EnterBtn = document.getElementById('ps2EnterBtn');
 
   function enterStore() {
     ps2Welcome.classList.add('fadeout');
+    // Mulai musik tepat saat tombol masuk diklik (interaksi user)
+    startBackgroundMusic();
     setTimeout(() => {
       ps2Welcome.style.display = 'none';
     }, 1200);
@@ -801,20 +883,20 @@
     });
   });
 
-  // ============ PARTIKEL BACKGROUND ============
+  // ============ PARTIKEL & FLOATING PS2 SHAPES ============
   const canvas = document.getElementById('particleCanvas');
   const ctx = canvas.getContext('2d');
-  let particles = [], animId = null;
+  let particles = [], shapes = [], animId = null;
 
   function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   }
-  window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
+  window.addEventListener('resize', () => { resizeCanvas(); initParticles(); initShapes(); });
 
   function initParticles() {
     particles = [];
-    const count = Math.min(120, Math.floor(window.innerWidth / 12));
+    const count = Math.min(100, Math.floor(window.innerWidth / 15));
     for (let i = 0; i < count; i++) {
       particles.push({
         x: Math.random() * canvas.width,
@@ -822,13 +904,87 @@
         radius: Math.random() * 2.5 + 1,
         speedX: (Math.random() - 0.5) * 0.4,
         speedY: (Math.random() - 0.5) * 0.2 + 0.1,
-        color: `hsl(${Math.random() * 40 + 210}, 90%, 65%)`
+        color: `hsl(${Math.random() * 40 + 210}, 90%, 65%)`,
+        alpha: Math.random() * 0.5 + 0.3
       });
     }
   }
 
+  function initShapes() {
+    shapes = [];
+    const shapeTypes = ['triangle', 'circle', 'cross', 'square'];
+    const count = Math.min(15, Math.floor(window.innerWidth / 100));
+    for (let i = 0; i < count; i++) {
+      shapes.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 20 + 12,
+        type: shapeTypes[Math.floor(Math.random() * shapeTypes.length)],
+        speedY: -(Math.random() * 0.3 + 0.15),
+        speedX: (Math.random() - 0.5) * 0.15,
+        rotation: Math.random() * Math.PI * 2,
+        rotationSpeed: (Math.random() - 0.5) * 0.01,
+        alpha: Math.random() * 0.15 + 0.08,
+        color: Math.random() > 0.5 ? 'rgba(140, 200, 255,' : 'rgba(100, 160, 255,'
+      });
+    }
+  }
+
+  function drawShape(shape) {
+    ctx.save();
+    ctx.translate(shape.x, shape.y);
+    ctx.rotate(shape.rotation);
+    ctx.strokeStyle = shape.color + shape.alpha + ')';
+    ctx.lineWidth = 2;
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = 'rgba(120, 180, 255, 0.5)';
+
+    const s = shape.size;
+    switch (shape.type) {
+      case 'triangle':
+        ctx.beginPath();
+        ctx.moveTo(0, -s);
+        ctx.lineTo(s * 0.9, s * 0.7);
+        ctx.lineTo(-s * 0.9, s * 0.7);
+        ctx.closePath();
+        ctx.stroke();
+        break;
+      case 'circle':
+        ctx.beginPath();
+        ctx.arc(0, 0, s * 0.8, 0, Math.PI * 2);
+        ctx.stroke();
+        break;
+      case 'cross':
+        ctx.beginPath();
+        ctx.moveTo(-s * 0.7, -s * 0.7);
+        ctx.lineTo(s * 0.7, s * 0.7);
+        ctx.moveTo(s * 0.7, -s * 0.7);
+        ctx.lineTo(-s * 0.7, s * 0.7);
+        ctx.stroke();
+        break;
+      case 'square':
+        ctx.strokeRect(-s * 0.7, -s * 0.7, s * 1.4, s * 1.4);
+        break;
+    }
+    ctx.restore();
+  }
+
   function drawParticles() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let s of shapes) {
+      drawShape(s);
+      s.y += s.speedY;
+      s.x += s.speedX;
+      s.rotation += s.rotationSpeed;
+      if (s.y < -40) {
+        s.y = canvas.height + 40;
+        s.x = Math.random() * canvas.width;
+      }
+      if (s.x < -40) s.x = canvas.width + 40;
+      if (s.x > canvas.width + 40) s.x = -40;
+    }
+
     for (let p of particles) {
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
@@ -848,6 +1004,7 @@
 
   resizeCanvas();
   initParticles();
+  initShapes();
   drawParticles();
 
   window.addEventListener('beforeunload', () => {
