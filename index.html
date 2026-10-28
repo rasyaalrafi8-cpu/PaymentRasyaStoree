@@ -2,23 +2,19 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>PaymentRasyaStore</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Space Grotesk', sans-serif;
       background: #050b17;
       min-height: 100vh;
       overflow-x: hidden;
       color: #eef5ff;
-      background-image: url('https://files.catbox.moe/elq77w.png');
+      background-image: url('https://cdn.zass.in/tjYkaDSJg0.jpg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -28,20 +24,16 @@
     body::before {
       content: "";
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background: rgba(5, 11, 23, 0.65);
       z-index: 0;
       pointer-events: none;
     }
     .canvas-bg {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: 1;
       pointer-events: none;
     }
@@ -63,15 +55,17 @@
       margin-bottom: 1.5rem;
     }
     .logo {
-      width: 100px;
-      height: auto;
+      width: 110px;
+      height: 110px;
+      object-fit: cover;
       filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
       transition: transform 0.3s ease;
       animation: floatLogo 3s ease-in-out infinite;
+      border-radius: 1.5rem;
+      border: 2px solid rgba(100, 180, 255, 0.3);
+      box-shadow: 0 0 30px rgba(100, 180, 255, 0.3);
     }
-    .logo:hover {
-      transform: scale(1.05);
-    }
+    .logo:hover { transform: scale(1.05); }
     @keyframes floatLogo {
       0% { transform: translateY(0px); }
       50% { transform: translateY(-6px); }
@@ -102,21 +96,24 @@
     }
 
     .payment-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       margin-bottom: 3rem;
     }
     .card-3d {
+      width: 100%;
+      max-width: 480px;
       background: rgba(12, 22, 40, 0.6);
       backdrop-filter: blur(14px);
       border-radius: 2.5rem;
-      padding: 2rem 1.8rem;
+      padding: 2.5rem 2rem;
       border: 1px solid rgba(110, 170, 250, 0.2);
       box-shadow: 0 30px 40px -20px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.05) inset;
       transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
       transform-style: preserve-3d;
       transform: translateZ(0) rotateX(2deg) rotateY(-0.5deg);
+      text-align: center;
     }
     .card-3d:hover {
       transform: translateY(-12px) rotateX(0deg) rotateY(0deg) scale(1.02);
@@ -125,7 +122,7 @@
       box-shadow: 0 40px 55px -18px black;
     }
     .card-icon {
-      font-size: 3.5rem;
+      font-size: 4rem;
       background: linear-gradient(145deg, #ffffff, #95c4ff);
       -webkit-background-clip: text;
       background-clip: text;
@@ -134,39 +131,15 @@
       display: inline-block;
     }
     .card-title {
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 700;
       margin-bottom: 0.25rem;
     }
     .card-sub {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       opacity: 0.7;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.8rem;
       letter-spacing: 0.3px;
-    }
-    .info-panel {
-      background: rgba(0, 0, 0, 0.45);
-      border-radius: 1.8rem;
-      padding: 1rem 1.2rem;
-      margin: 1.2rem 0;
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 240, 0.1);
-    }
-    .number-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-      font-family: monospace;
-      font-size: 1.3rem;
-      font-weight: 600;
-      background: #030b1a80;
-      border-radius: 2rem;
-      padding: 0.7rem 1.2rem;
-    }
-    .number-row span {
-      word-break: break-all;
     }
     .qr-container {
       text-align: center;
@@ -174,11 +147,11 @@
       transition: transform 0.25s;
     }
     .qr-container img {
-      max-width: 170px;
+      max-width: 240px;
       width: 100%;
       background: white;
       border-radius: 1.5rem;
-      padding: 10px;
+      padding: 12px;
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(255, 255, 255, 0.1);
       transition: all 0.3s;
       cursor: pointer;
@@ -187,15 +160,18 @@
       transform: scale(1.05) rotate(0.5deg);
       box-shadow: 0 20px 35px rgba(0, 0, 0, 0.5);
     }
+    .qr-caption {
+      font-size: 0.8rem;
+      color: #aac8ff;
+      margin-top: 12px;
+      opacity: 0.85;
+    }
 
-    /* ============================================================
-       TOMBOL BIRU ELEGAN — SELARAS DENGAN TEMA WEBSITE
-    ============================================================ */
     .btn-group-flex {
       display: flex;
       flex-wrap: wrap;
       gap: 0.8rem;
-      margin-top: 1.6rem;
+      margin-top: 1.8rem;
     }
     .btn {
       flex: 1;
@@ -203,7 +179,7 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      padding: 0.8rem 1.2rem;
+      padding: 0.9rem 1.2rem;
       font-weight: 600;
       font-size: 0.9rem;
       border-radius: 3rem;
@@ -221,23 +197,17 @@
       box-shadow: 0 4px 15px rgba(0, 50, 150, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
       text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     }
-    /* Efek shimmer (kilau) */
     .btn::after {
       content: '';
       position: absolute;
-      top: -50%;
-      left: -60%;
-      width: 200%;
-      height: 200%;
+      top: -50%; left: -60%;
+      width: 200%; height: 200%;
       background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.08), transparent 30%);
       transform: rotate(25deg);
       transition: all 0.6s;
       pointer-events: none;
     }
-    .btn:hover::after {
-      left: 100%;
-    }
-    /* Hover umum */
+    .btn:hover::after { left: 100%; }
     .btn:hover {
       transform: translateY(-3px) scale(1.03);
       background: rgba(30, 120, 255, 0.25);
@@ -248,8 +218,6 @@
       transform: translateY(1px) scale(0.97);
       box-shadow: 0 4px 10px rgba(0, 50, 150, 0.2);
     }
-
-    /* ----- Tombol dengan gradien biru lebih pekat (untuk aksi utama) ----- */
     .btn-primary {
       background: linear-gradient(135deg, rgba(30, 100, 200, 0.35), rgba(20, 60, 180, 0.45));
       border-color: rgba(60, 150, 255, 0.3);
@@ -260,20 +228,6 @@
       border-color: rgba(80, 180, 255, 0.6);
       box-shadow: 0 8px 35px rgba(0, 120, 255, 0.4);
     }
-
-    /* ----- Tombol DANA (biru keunguan) ----- */
-    .btn-dana {
-      background: linear-gradient(135deg, rgba(0, 100, 255, 0.3), rgba(80, 0, 255, 0.3));
-      border-color: rgba(0, 120, 255, 0.3);
-      box-shadow: 0 4px 20px rgba(0, 80, 200, 0.2);
-    }
-    .btn-dana:hover {
-      background: linear-gradient(135deg, rgba(30, 140, 255, 0.4), rgba(120, 40, 255, 0.4));
-      border-color: rgba(0, 180, 255, 0.5);
-      box-shadow: 0 8px 35px rgba(0, 120, 255, 0.4);
-    }
-
-    /* ----- Tombol WhatsApp (biru tosca) ----- */
     .btn-wa {
       background: rgba(0, 180, 200, 0.2);
       border-color: rgba(0, 200, 220, 0.25);
@@ -284,8 +238,6 @@
       border-color: rgba(0, 220, 240, 0.5);
       box-shadow: 0 8px 30px rgba(0, 180, 220, 0.3);
     }
-
-    /* ----- Tombol Channel (biru ungu) ----- */
     .btn-channel {
       background: linear-gradient(135deg, rgba(100, 80, 255, 0.2), rgba(60, 0, 200, 0.2));
       border-color: rgba(120, 80, 255, 0.25);
@@ -296,8 +248,6 @@
       border-color: rgba(160, 120, 255, 0.5);
       box-shadow: 0 8px 30px rgba(100, 80, 255, 0.3);
     }
-
-    /* ----- Tombol Copy (biru muda) ----- */
     .btn-copy {
       background: rgba(60, 160, 255, 0.15);
       border-color: rgba(80, 180, 255, 0.2);
@@ -309,41 +259,6 @@
       box-shadow: 0 8px 30px rgba(60, 160, 255, 0.25);
     }
 
-    /* ----- Tombol WELCOME (biru gradien pekat) ----- */
-    .btn-welcome {
-      background: linear-gradient(135deg, rgba(30, 100, 200, 0.45), rgba(80, 40, 220, 0.45));
-      border-color: rgba(60, 150, 255, 0.3);
-      padding: 0.9rem 2rem;
-      font-size: 1rem;
-      box-shadow: 0 8px 0 rgba(0, 0, 0, 0.25), 0 4px 20px rgba(0, 80, 200, 0.2);
-      transform: translateY(-2px);
-    }
-    .btn-welcome:hover {
-      transform: translateY(-5px) scale(1.02);
-      background: linear-gradient(135deg, rgba(50, 140, 255, 0.55), rgba(120, 60, 255, 0.55));
-      box-shadow: 0 12px 0 rgba(0, 0, 0, 0.25), 0 8px 35px rgba(0, 120, 255, 0.4);
-    }
-    .btn-welcome:active {
-      transform: translateY(2px);
-      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
-    }
-
-    /* ----- Tombol "Salin" kecil di number-row (biru tipis) ----- */
-    .btn-copy-sm {
-      background: rgba(60, 160, 255, 0.15);
-      border-color: rgba(80, 180, 255, 0.15);
-      padding: 0.3rem 1rem;
-      font-size: 0.8rem;
-      flex: 0 0 auto;
-      box-shadow: 0 2px 10px rgba(0, 80, 200, 0.08);
-    }
-    .btn-copy-sm:hover {
-      background: rgba(80, 180, 255, 0.25);
-      border-color: rgba(100, 200, 255, 0.35);
-      box-shadow: 0 4px 20px rgba(60, 160, 255, 0.2);
-    }
-
-    /* ----- Badge copy di WA card (tombol kecil biru) ----- */
     .badge-copy-sm {
       background: rgba(60, 160, 255, 0.12);
       border: 1px solid rgba(80, 180, 255, 0.15);
@@ -397,9 +312,7 @@
       border: 1px solid rgba(44, 87, 124, 0.4);
       backdrop-filter: blur(4px);
     }
-    .wa-card i {
-      font-size: 2.2rem;
-    }
+    .wa-card i { font-size: 2.2rem; }
     .wa-card a {
       color: white;
       text-decoration: none;
@@ -407,9 +320,7 @@
       transition: 0.2s;
       word-break: break-all;
     }
-    .wa-card a:hover {
-      color: #4da6ff;
-    }
+    .wa-card a:hover { color: #4da6ff; }
 
     .toast-notif {
       position: fixed;
@@ -429,9 +340,7 @@
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
       font-size: 0.9rem;
     }
-    .toast-notif.show {
-      transform: translateX(-50%) translateY(0px);
-    }
+    .toast-notif.show { transform: translateX(-50%) translateY(0px); }
     footer {
       text-align: center;
       margin-top: 3rem;
@@ -439,111 +348,265 @@
       font-size: 0.75rem;
     }
 
-    /* WELCOME MODAL */
-    .welcome-modal {
+    /* ============================================================
+       EFEK WELCOME PS2 BOOT SCREEN (PERMANEN)
+    ============================================================ */
+    .ps2-welcome {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(12px);
-      z-index: 2000;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #000000;
+      z-index: 9999;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      visibility: visible;
-      opacity: 1;
-      transition: opacity 0.4s ease, visibility 0.4s;
+      overflow: hidden;
+      transition: opacity 1.2s ease, visibility 1.2s;
     }
-    .welcome-modal.hide {
+    .ps2-welcome.hide {
       opacity: 0;
       visibility: hidden;
+      pointer-events: none;
     }
-    .welcome-card {
-      background: rgba(12, 25, 45, 0.95);
-      backdrop-filter: blur(20px);
-      border-radius: 2.5rem;
-      padding: 2.5rem 2rem;
-      max-width: 500px;
-      width: 90%;
+    .ps2-stars {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+    }
+    .ps2-stars::before,
+    .ps2-stars::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 2px; height: 2px;
+      background: transparent;
+      box-shadow:
+        10vw 15vh #fff, 20vw 45vh #fff, 35vw 20vh #fff, 50vw 70vh #fff,
+        65vw 10vh #fff, 80vw 60vh #fff, 90vw 30vh #fff, 15vw 85vh #fff,
+        45vw 55vh #fff, 70vw 90vh #fff, 25vw 35vh #fff, 55vw 15vh #fff,
+        85vw 75vh #fff, 5vw 50vh #fff, 40vw 80vh #fff, 75vw 25vh #fff,
+        95vw 55vh #fff, 30vw 65vh #fff, 60vw 40vh #fff, 12vw 70vh #fff;
+      animation: ps2twinkle 3s infinite alternate;
+    }
+    .ps2-stars::after {
+      width: 1px; height: 1px;
+      animation-delay: 1.5s;
+      box-shadow:
+        8vw 25vh #9ecfff, 30vw 15vh #9ecfff, 55vw 45vh #9ecfff, 78vw 65vh #9ecfff,
+        22vw 55vh #9ecfff, 42vw 25vh #9ecfff, 68vw 5vh #9ecfff, 88vw 45vh #9ecfff,
+        18vw 90vh #9ecfff, 52vw 80vh #9ecfff, 82vw 20vh #9ecfff, 5vw 5vh #9ecfff;
+    }
+    @keyframes ps2twinkle {
+      0% { opacity: 0.3; }
+      100% { opacity: 1; }
+    }
+    .ps2-scanlines {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      pointer-events: none;
+      z-index: 5;
+      opacity: 0.6;
+    }
+    .ps2-vignette {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.7) 100%);
+      pointer-events: none;
+      z-index: 4;
+    }
+    .ps2-content {
+      position: relative;
+      z-index: 10;
       text-align: center;
-      border: 1px solid rgba(100, 180, 255, 0.5);
-      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-      transform: scale(0.9);
-      animation: popIn 0.4s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+      padding: 2rem;
+      animation: ps2fadeIn 1.8s ease forwards;
+      opacity: 0;
     }
-    @keyframes popIn {
-      0% { transform: scale(0.8); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+    @keyframes ps2fadeIn {
+      0% { opacity: 0; transform: scale(0.7); }
+      60% { opacity: 1; transform: scale(1.05); }
+      100% { opacity: 1; transform: scale(1); }
     }
-    .welcome-logo {
-      width: 90px;
-      margin-bottom: 1rem;
+    .ps2-logo {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
       border-radius: 2rem;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.05);
       padding: 8px;
+      box-shadow: 0 0 60px rgba(100, 180, 255, 0.6), 0 0 120px rgba(80, 120, 255, 0.3);
+      animation: ps2logoPulse 2.5s ease-in-out infinite;
+      margin-bottom: 2rem;
+      border: 2px solid rgba(100, 180, 255, 0.4);
     }
-    .welcome-card h2 {
-      font-size: 2rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #fff, #a0c0ff);
+    @keyframes ps2logoPulse {
+      0%, 100% {
+        box-shadow: 0 0 60px rgba(100, 180, 255, 0.6), 0 0 120px rgba(80, 120, 255, 0.3);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 90px rgba(140, 200, 255, 0.9), 0 0 180px rgba(120, 160, 255, 0.5);
+        transform: scale(1.04);
+      }
+    }
+    .ps2-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      background: linear-gradient(180deg, #ffffff 0%, #a7c0ff 40%, #6a8cff 70%, #4d6eff 100%);
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
+      text-shadow: 0 0 40px rgba(100, 180, 255, 0.6);
       margin-bottom: 0.5rem;
+      animation: ps2titleGlow 2s ease-in-out infinite alternate;
     }
-    .welcome-card p {
-      color: #ccddf8;
-      margin: 1rem 0;
-      line-height: 1.5;
+    @keyframes ps2titleGlow {
+      0% { filter: drop-shadow(0 0 15px rgba(100, 180, 255, 0.5)); }
+      100% { filter: drop-shadow(0 0 35px rgba(140, 200, 255, 0.9)); }
     }
-    .welcome-features {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin: 1.5rem 0;
-      flex-wrap: wrap;
+    .ps2-subtitle {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.5em;
+      color: #7ba8ff;
+      margin-bottom: 3rem;
+      opacity: 0.8;
+      animation: ps2subtitlePulse 3s ease-in-out infinite;
     }
-    .welcome-features span {
-      background: rgba(60, 150, 255, 0.1);
-      backdrop-filter: blur(4px);
-      border: 1px solid rgba(60, 150, 255, 0.15);
-      padding: 0.3rem 1rem;
-      border-radius: 2rem;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: #b0ccff;
+    @keyframes ps2subtitlePulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+    .ps2-loading-container {
+      width: 320px;
+      max-width: 80vw;
+      margin: 0 auto 1.5rem;
+    }
+    .ps2-loading-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 0 20px rgba(100, 180, 255, 0.2) inset;
+    }
+    .ps2-loading-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #4d6eff, #a7c0ff, #ffffff);
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(140, 200, 255, 0.9);
+      animation: ps2loadBar 3.5s ease-in-out forwards;
+    }
+    @keyframes ps2loadBar {
+      0% { width: 0%; }
+      25% { width: 35%; }
+      55% { width: 60%; }
+      80% { width: 85%; }
+      100% { width: 100%; }
+    }
+    .ps2-loading-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.4em;
+      color: #7ba8ff;
+      margin-top: 1rem;
+      animation: ps2blink 1.2s ease-in-out infinite;
+    }
+    @keyframes ps2blink {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+    .ps2-enter-btn {
+      margin-top: 2rem;
+      padding: 0.8rem 2.5rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.3em;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(140, 200, 255, 0.5);
+      color: #a7c0ff;
+      border-radius: 3rem;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      backdrop-filter: blur(6px);
+      animation: ps2btnAppear 0.5s ease 2s forwards;
+      opacity: 0;
+    }
+    @keyframes ps2btnAppear {
+      0% { opacity: 0; transform: translateY(15px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .ps2-enter-btn:hover {
+      background: rgba(100, 180, 255, 0.15);
+      border-color: #a7c0ff;
+      box-shadow: 0 0 30px rgba(140, 200, 255, 0.6);
+      color: #ffffff;
+      transform: scale(1.05);
+    }
+    .ps2-enter-btn:active {
+      transform: scale(0.98);
+    }
+    .ps2-welcome.fadeout {
+      animation: ps2fadeOut 1.2s forwards;
+    }
+    @keyframes ps2fadeOut {
+      0% { opacity: 1; }
+      100% { opacity: 0; visibility: hidden; }
     }
 
     @media (max-width: 780px) {
       .wrapper { padding: 1rem 1.2rem 2rem; }
       .hero h1 { font-size: 2.3rem; }
-      .logo { width: 70px; }
-      .card-title { font-size: 1.7rem; }
-      .number-row { flex-direction: column; align-items: flex-start; }
+      .logo { width: 85px; height: 85px; }
+      .card-title { font-size: 1.8rem; }
       .btn-group-flex .btn { flex: auto; }
       .flex-wa { flex-direction: column; }
-      .welcome-card { padding: 1.8rem; }
+      .card-3d { padding: 2rem 1.5rem; }
+      .ps2-title { font-size: 2rem; letter-spacing: 0.1em; }
+      .ps2-subtitle { font-size: 0.7rem; letter-spacing: 0.3em; }
+      .ps2-logo { width: 100px; height: 100px; }
+      .ps2-enter-btn { font-size: 0.75rem; padding: 0.6rem 1.5rem; }
     }
   </style>
 </head>
 <body>
 
-<audio id="bgmAudio" loop preload="auto" style="display: none;"></audio>
+<!-- ============================================================
+     PS2 BOOT SCREEN WELCOME (PERMANEN)
+============================================================ -->
+<div id="ps2Welcome" class="ps2-welcome">
+  <div class="ps2-stars"></div>
+  <div class="ps2-vignette"></div>
+  <div class="ps2-scanlines"></div>
 
-<!-- WELCOME MODAL -->
-<div id="welcomeModal" class="welcome-modal">
-  <div class="welcome-card">
-    <img src="https://files.catbox.moe/elq77w.png" alt="Logo" class="welcome-logo" onerror="this.src='https://placehold.co/200x200?text=LOGO'" />
-    <h2>Welcome Di Website RasyaStore</h2>
-    <p></p>
-    <div class="welcome-features">
-      <span><i class="fas fa-shield-alt"></i>RasyaStore</span>
-      <span><i class="fas fa-bolt"></i> Instan</span>
-      <span><i class="fas fa-wallet"></i> DANA & QRIS</span>
+  <div class="ps2-content">
+    <img src="https://cdn.zass.in/tjYkaDSJg0.jpg" alt="Rasya Store" class="ps2-logo" onerror="this.src='https://placehold.co/200x200?text=LOGO'" />
+    <div class="ps2-title">PAYMENT RASYA STORE</div>
+    <div class="ps2-subtitle"></div>
+    
+    <div class="ps2-loading-container">
+      <div class="ps2-loading-bar">
+        <div class="ps2-loading-fill"></div>
+      </div>
+      <div class="ps2-loading-text">LOADING SYSTEM...</div>
     </div>
-    <button id="closeWelcomeBtn" class="btn btn-welcome"><i class="fas fa-rocket"></i> Mulai Bertransaksi</button>
+
+    <button id="ps2EnterBtn" class="ps2-enter-btn">▶ CLICK</button>
   </div>
 </div>
 
@@ -552,52 +615,32 @@
 <div class="wrapper">
   <div class="hero">
     <div class="logo-container">
-      <img src="https://files.catbox.moe/elq77w.png" alt="Logo Nexus Pay" class="logo" id="mainLogo" onerror="this.onerror=null;this.src='https://placehold.co/200x200?text=LOGO&font=montserrat';" />
+      <img src="https://cdn.zass.in/tjYkaDSJg0.jpg" alt="Rasya Store Logo" class="logo" id="mainLogo" onerror="this.onerror=null;this.src='https://placehold.co/200x200?text=LOGO&font=montserrat';" />
     </div>
-    <h1>✦ RASYA STORE ✦</h1>
+    <h1> PAYMENT RASYA STORE </h1>
     <p></p>
   </div>
 
   <div class="payment-grid">
-    <!-- KARTU DANA -->
-    <div class="card-3d">
-      <div class="card-icon"><i class="fas fa-circle-dollar-to-slot"></i></div>
-      <h2 class="card-title">DANA</h2>
-      <div class="card-sub">Sertakan Bukti Transfer, Tidak Ada Bukti Transfer Tidak Akan di Proses!</div>
-      <div class="info-panel">
-        <div class="number-row">
-          <span><i class="fas fa-mobile-alt"></i> 08999889968</span>
-          <button class="btn btn-copy-sm" id="copyDanaBtn"><i class="fas fa-copy"></i> Salin</button>
-        </div>
-        <div style="font-size: 0.75rem; margin-top: 10px; text-align: center;"><i class="fas fa-clock"></i> 24 jam online</div>
-      </div>
-      <div class="btn-group-flex">
-        <button id="danaInfoBtn" class="btn btn-primary"><i class="fas fa-info-circle"></i> Cara Bayar</button>
-        <button id="copyDanaOnlyBtn" class="btn btn-copy"><i class="fas fa-copy"></i> Salin Nomor.</button>
-        <a href="#" id="openDanaAppBtn" class="btn btn-dana" onclick="openDanaApp(event)"><i class="fas fa-wallet"></i> Buka DANA</a>
-      </div>
-    </div>
-
-    <!-- KARTU QRIS -->
     <div class="card-3d">
       <div class="card-icon"><i class="fas fa-qrcode"></i></div>
       <h2 class="card-title">QRIS</h2>
       <div class="card-sub">Sertakan Bukti Transfer, Tidak Ada Bukti Transfer Tidak Akan di Proses!</div>
       <div class="qr-container">
-        <img id="qrisImage" src="https://files.catbox.moe/qzcuan.jpeg" alt="QRIS Pembayaran" onerror="this.onerror=null;this.src='https://placehold.co/350x350?text=QRIS+Image+Load+Error&font=montserrat';" />
+        <img id="qrisImage" src="https://cdn.zass.in/AONu285O1H.jpg" alt="QRIS Pembayaran Rasya Store" onerror="this.onerror=null;this.src='https://placehold.co/350x350?text=QRIS+Image+Load+Error&font=montserrat';" />
+        <div class="qr-caption"><i class="fas fa-camera"></i> Scan QRIS dengan aplikasi bank atau e-wallet</div>
       </div>
       <div class="btn-group-flex">
         <button id="expandQrBtn" class="btn btn-primary"><i class="fas fa-expand"></i> Perbesar QR</button>
-        <a id="downloadQrBtn" class="btn btn-copy" download="qris_payment.jpeg"><i class="fas fa-download"></i> Unduh</a>
+        <a id="downloadQrBtn" class="btn btn-copy" download="qris_rasya_store.jpg"><i class="fas fa-download"></i> Unduh</a>
       </div>
     </div>
   </div>
 
-  <!-- KONTAK WHATSAPP & CHANNEL -->
   <div class="contact-premium">
     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
       <i class="fab fa-whatsapp" style="font-size: 2rem; color: #4da6ff;"></i>
-      <h3 style="font-weight: 600;">Nomor Admin & Saluran Admin</h3>
+      <h3 style="font-weight: 600;">Kanal Resmi & Dukungan</h3>
     </div>
     <div class="flex-wa">
       <div class="wa-card">
@@ -617,7 +660,10 @@
         </div>
       </div>
     </div>
-
+    <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.2rem;">
+      <a href="https://wa.me/6289677269810?text=Halo%20saya%20ingin%20order%20di%20Rasya%20Store" class="btn btn-wa" style="flex: 0;"><i class="fab fa-whatsapp"></i> Chat Sekarang</a>
+      <a href="https://whatsapp.com/channel/0029Vb8Ahsm2phHR7AkyIx2O" class="btn btn-channel" style="flex: 0;"><i class="fas fa-bell"></i> Ikuti Channel</a>
+    </div>
   </div>
   <footer></footer>
 </div>
@@ -625,64 +671,26 @@
 <div id="toastMessage" class="toast-notif">✅ Tersalin ke clipboard</div>
 
 <script>
-  // ============ AUDIO ============
-  const audio = document.getElementById('bgmAudio');
-  audio.src = 'https://i.top4top.io/m_38186wc000.mp3';
-  audio.loop = true;
-  audio.volume = 0.7;
+  // ============================================================
+  // PS2 WELCOME — PERMANEN (MUNCUL SETIAP RELOAD)
+  // ============================================================
+  const ps2Welcome = document.getElementById('ps2Welcome');
+  const ps2EnterBtn = document.getElementById('ps2EnterBtn');
 
-  function startBackgroundMusic() {
-    if (audio.paused) {
-      audio.play().catch(e => console.log('Autoplay ditolak'));
+  function enterStore() {
+    ps2Welcome.classList.add('fadeout');
+    setTimeout(() => {
+      ps2Welcome.style.display = 'none';
+    }, 1200);
+  }
+
+  ps2EnterBtn.addEventListener('click', enterStore);
+
+  ps2Welcome.addEventListener('click', (e) => {
+    if (e.target === ps2Welcome || e.target.classList.contains('ps2-stars') || e.target.classList.contains('ps2-vignette') || e.target.classList.contains('ps2-scanlines')) {
+      enterStore();
     }
-  }
-
-  // ============ WELCOME MODAL ============
-  const welcomeModal = document.getElementById('welcomeModal');
-  const closeWelcomeBtn = document.getElementById('closeWelcomeBtn');
-
-  if (sessionStorage.getItem('welcomeShown')) {
-    welcomeModal.classList.add('hide');
-    function oneTimePlay() {
-      startBackgroundMusic();
-      document.body.removeEventListener('click', oneTimePlay);
-      document.body.removeEventListener('touchstart', oneTimePlay);
-    }
-    document.body.addEventListener('click', oneTimePlay);
-    document.body.addEventListener('touchstart', oneTimePlay);
-  } else {
-    welcomeModal.classList.remove('hide');
-    sessionStorage.setItem('welcomeShown', 'true');
-  }
-
-  function closeWelcomeModal() {
-    welcomeModal.classList.add('hide');
-    startBackgroundMusic();
-  }
-
-  closeWelcomeBtn.addEventListener('click', closeWelcomeModal);
-  welcomeModal.addEventListener('click', (e) => {
-    if (e.target === welcomeModal) closeWelcomeModal();
   });
-
-  // ============ BUKA APLIKASI DANA ============
-  function openDanaApp(e) {
-    e.preventDefault();
-    const danaDeepLink = 'dana://';
-    const fallbackUrl = 'https://play.google.com/store/apps/details?id=id.dana';
-    const startTime = Date.now();
-    const win = window.open(danaDeepLink, '_blank');
-    if (!win || win.closed) {
-      window.location.href = fallbackUrl;
-    } else {
-      setTimeout(() => {
-        const elapsed = Date.now() - startTime;
-        if (elapsed < 1500) {
-          window.location.href = fallbackUrl;
-        }
-      }, 1200);
-    }
-  }
 
   // ============ TOAST & COPY ============
   const toastEl = document.getElementById('toastMessage');
@@ -706,19 +714,12 @@
     }
   }
 
-  // DANA
-  const danaNumber = '08999889968';
-  document.getElementById('copyDanaBtn').onclick = () => copyText(danaNumber, '📱 Nomor DANA: ' + danaNumber);
-  document.getElementById('copyDanaOnlyBtn').onclick = () => copyText(danaNumber, '✅ Nomor DANA disimpan');
-  document.getElementById('danaInfoBtn').onclick = () => showToast('💡 Buka aplikasi DANA → Pilih "Bayar" → masukkan nomor 08999889968 → konfirmasi');
-
-  // WA & Channel
   const waNumber = '6289677269810';
   const channelUrl = 'https://whatsapp.com/channel/0029Vb8Ahsm2phHR7AkyIx2O';
   document.getElementById('copyWaNumber').onclick = () => copyText(waNumber, '📞 Nomor WA: +62 896-7726-9810');
   document.getElementById('copyChannelLink').onclick = () => copyText(channelUrl, '🔗 Link Channel WhatsApp tersalin');
 
-  // QRIS
+  // ============ QRIS ============
   const qrisImg = document.getElementById('qrisImage');
   const expandBtn = document.getElementById('expandQrBtn');
   const downloadBtn = document.getElementById('downloadQrBtn');
@@ -752,12 +753,12 @@
 
   expandBtn.onclick = () => {
     let url = qrisImg.src;
-    if (url.includes('placehold')) url = 'https://files.catbox.moe/qzcuan.jpeg';
+    if (url.includes('placehold')) url = 'https://cdn.zass.in/AONu285O1H.jpg';
     showQrModal(url);
   };
   qrisImg.onclick = () => {
     let url = qrisImg.src;
-    if (url.includes('placehold')) url = 'https://files.catbox.moe/qzcuan.jpeg';
+    if (url.includes('placehold')) url = 'https://cdn.zass.in/AONu285O1H.jpg';
     showQrModal(url);
   };
   downloadBtn.addEventListener('click', (e) => {
@@ -768,7 +769,7 @@
       .then(blob => {
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = 'qris_payment_3d.png';
+        link.download = 'qris_rasya_store.jpg';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -777,8 +778,8 @@
       })
       .catch(() => {
         const fallback = document.createElement('a');
-        fallback.href = 'https://files.catbox.moe/qzcuan.jpeg';
-        fallback.download = 'qris_backup.jpeg';
+        fallback.href = 'https://cdn.zass.in/AONu285O1H.jpg';
+        fallback.download = 'qris_rasya_store_backup.jpg';
         fallback.click();
         showToast('📸 Mengunduh gambar...');
       });
